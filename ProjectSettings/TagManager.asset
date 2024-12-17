@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Waypoints
+  - Ally
+  - Enemy
+  - Stone
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - Pokemon
+  - Water
+  - UI
+  - Tile
+  - TilemapLayer
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Enemy
+    uniqueID: 1548713249
+    locked: 0
+  - name: Ally
+    uniqueID: 1799033709
+    locked: 0
