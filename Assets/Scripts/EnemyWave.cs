@@ -10,52 +10,79 @@ public class EnemyWave : MonoBehaviour
     public int enemiesPerWave = 5; // Số lượng kẻ thù trong mỗi wave
     public int totalWaves = 3; // Tổng số wave muốn tạo
 
+    private int enemiesDied = 0; // Số lượng kẻ thù đã chết
+    private static int totalEnemiesSpawned = 0; // Tổng số kẻ thù đã được sinh ra từ tất cả các instance
+    private int totalEnemiesToSpawn; // Tổng số kẻ thù sẽ spawn trong wave này
+    public WinLoseManager winLoseManager;
+
     private float countdown; // Đếm ngược thời gian cho wave tiếp theo
     private int currentWave = 0; // Chỉ số wave hiện tại
 
     void Start()
     {
+        totalEnemiesToSpawn = enemiesPerWave * totalWaves; // Tính tổng số kẻ thù sẽ spawn trong wave này
+        totalEnemiesSpawned += totalEnemiesToSpawn; // Cập nhật tổng số kẻ thù đã spawn từ tất cả các instance
+        winLoseManager = FindObjectOfType<WinLoseManager>();
         ResetWave(); // Đặt lại trạng thái wave
         StartCoroutine(SpawnWaves());
+
+        // Đăng ký với sự kiện OnEnemyDied
+        Enemy.OnEnemyDied += HandleEnemyDied;
+    }
+
+    private void HandleEnemyDied()
+    {
+        enemiesDied++;
+        Debug.Log("Total enemies died in this wave: " + enemiesDied);
+
+        // Kiểm tra nếu tất cả kẻ thù đã chết so với tổng số kẻ thù đã spawn từ tất cả instance.
+        if (enemiesDied >= totalEnemiesSpawned)
+        {
+            winLoseManager.WinGame(); // Gọi hàm của bạn ở đây khi tất cả kẻ thù trong wave này đã chết.
+        }
     }
 
     IEnumerator SpawnWaves()
     {
-        // yield return new WaitForSeconds(10); // Thời gian trước khi bắt đầu spawn 
         while (currentWave < totalWaves)
         {
             Debug.Log("Preparing to spawn wave " + (currentWave + 1));
-            countdown = timeBetweenWaves; // Đặt lại thời gian đếm ngược
+            countdown = timeBetweenWaves;
 
             while (countdown > 0f)
             {
-                countdown -= Time.deltaTime; // Giảm thời gian đếm ngược
-                // Debug.Log("Countdown: " + countdown); // Thêm log để kiểm tra countdown
-                yield return null; // Chờ đến frame tiếp theo
+                countdown -= Time.deltaTime;
+                yield return null;
             }
 
             Debug.Log("Starting wave " + (currentWave + 1));
-            
+
             for (int i = 0; i < enemiesPerWave; i++)
             {
                 SpawnEnemy();
-                Debug.Log("Spawned enemy " + (i + 1) + " in wave " + (currentWave + 1));
-                yield return new WaitForSeconds(1f); // Thời gian giữa các kẻ thù được spawn
+                yield return new WaitForSeconds(1f); // Thời gian giữa các lần spawn.
             }
 
-            currentWave++; // Tăng chỉ số wave sau khi spawn xong
+            currentWave++;
         }
     }
 
     void SpawnEnemy()
     {
-        Instantiate(enemyPrefab, spawnPoint.position, Quaternion.identity); // Spawn kẻ thù tại điểm đã chọn
-    }
+        Instantiate(enemyPrefab, spawnPoint.position, Quaternion.identity); 
+   }
 
-    public void ResetWave()
-    {
-        currentWave = 0;
-        Time.timeScale = 1;
-        countdown = timeBetweenWaves; // Đặt lại countdown
-    }
+   public void ResetWave()
+   {
+       currentWave = 0;
+       enemiesDied = 0; // Đặt lại số lượng kẻ thù đã chết khi reset wave.
+       countdown = timeBetweenWaves;
+   }
+
+   private void OnDestroy()
+   {
+       // Hủy đăng ký sự kiện khi đối tượng bị hủy.
+       Enemy.OnEnemyDied -= HandleEnemyDied;
+       // Không giảm tổng số kẻ thù đã spawn ở đây.
+   }
 }

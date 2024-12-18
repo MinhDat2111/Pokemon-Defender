@@ -24,7 +24,7 @@ public class Ally : MonoBehaviour
     public void TakeDamage(float damage)
     {
         health -= damage; // Giảm máu
-        Debug.Log("Ally takes damage: " + damage + ". Current health: " + health);
+        // Debug.Log("Ally takes damage: " + damage + ". Current health: " + health);
         
         if (health <= 0)
         {

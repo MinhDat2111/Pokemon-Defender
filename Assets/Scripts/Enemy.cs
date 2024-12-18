@@ -10,13 +10,16 @@ public class Enemy : MonoBehaviour
     public float attackRange = 1f; // Khoảng cách tấn công
     public float attackSpeed = 1f; // Thời gian giãn cách giữa các đòn đánh
 
-    private Waypoints waypoints; // Tham chiếu đến đối tượng Waypoints
-    private int waypointIndex; // Chỉ số waypoint hiện tại
-    private float lastAttackTime = 0f; // Thời gian của lần tấn công cuối cùng
-    private GameObject targetAlly; // Đối tượng đồng minh hiện tại mà kẻ thù đang tấn công
-    private Animator animator;
+    protected Waypoints waypoints; // Tham chiếu đến đối tượng Waypoints
+    protected int waypointIndex; // Chỉ số waypoint hiện tại
+    protected float lastAttackTime = 0f; // Thời gian của lần tấn công cuối cùng
+    protected GameObject targetAlly; // Đối tượng đồng minh hiện tại mà kẻ thù đang tấn công
+    protected Animator animator;
 
-    void Start()
+    public delegate void EnemyDiedHandler();
+    public static event EnemyDiedHandler OnEnemyDied;
+
+    protected virtual void Start()
     {
         waypoints = GameObject.FindGameObjectWithTag("Waypoints").GetComponent<Waypoints>();
         animator = GetComponent<Animator>();
@@ -28,10 +31,9 @@ public class Enemy : MonoBehaviour
         CheckForAttack(); // Kiểm tra xem có thể tấn công không
     }
 
-    void MoveTowardsWaypoint()
+    protected virtual void MoveTowardsWaypoint()
     {
-        
-        if (waypointIndex < waypoints.waypoints.Length && targetAlly == null) // Không di chuyển khi đang tấn công
+        if (waypointIndex < waypoints.waypoints.Length && targetAlly == null)
         {
             Vector3 direction = waypoints.waypoints[waypointIndex].position - transform.position;
             direction.Normalize();
@@ -51,99 +53,90 @@ public class Enemy : MonoBehaviour
                 animator.SetTrigger("MoveLeft");
                 transform.localScale = new Vector3(-1, 1, 1);
             }
-            else if (angle >= -135 && angle <-45)
+            else if (angle >= -135 && angle < -45)
             {
                 animator.SetTrigger("MoveDown");
                 transform.localScale = new Vector3(1, 1, 1);
             }
             transform.position = Vector2.MoveTowards(transform.position, waypoints.waypoints[waypointIndex].position, speed * Time.deltaTime);
+
             if (Vector2.Distance(transform.position, waypoints.waypoints[waypointIndex].position) < 0.1f)
             {
-                if (waypointIndex < waypoints.waypoints.Length - 1)
+                waypointIndex++;
+                if (waypointIndex >= waypoints.waypoints.Length)
                 {
-                    waypointIndex++;
-                }
-                else 
-                {
-                    // Gây sát thương lên viên đá trấn giữ trước khi xóa kẻ thù
-                    GameObject stone = GameObject.FindGameObjectWithTag("Stone"); // Giả sử viên đá có tag là "Stone"
+                    // Logic khi đến waypoint cuối cùng, ví dụ như gây sát thương lên viên đá trấn giữ
+                    GameObject stone = GameObject.FindGameObjectWithTag("Stone");
                     if (stone != null)
                     {
                         WinLoseManager winLoseManager = stone.GetComponent<WinLoseManager>();
                         if (winLoseManager != null)
                         {
-                            winLoseManager.TakeDamage(1f); // Gây 1 sát thương lên viên đá
+                            winLoseManager.TakeDamage(1f);
                         }
                     }
-
-                    Destroy(gameObject); // Xóa kẻ thù nếu đã đến waypoint cuối cùng
+                    Destroy(gameObject);
                 }
             }
         }
     }
 
-    void CheckForAttack()
+    protected virtual void CheckForAttack()
     {
         if (targetAlly != null)
         {
-            Ally ally = targetAlly.GetComponent<Ally>();
-            if (ally == null || ally.health <= 0 || ally.IsOnTower) // Không tấn công nếu đồng minh chết hoặc ở trên tower
-            {
-                targetAlly = null; // Nếu đồng minh chết hoặc ở trên tower, không còn mục tiêu
-                return;
-            }
-            // Kiểm tra khoảng cách để tấn công
             float distance = Vector2.Distance(transform.position, targetAlly.transform.position);
             if (distance <= attackRange && Time.time >= lastAttackTime + attackSpeed)
             {
-                Attack(targetAlly.transform); // Gọi phương thức tấn công
-                lastAttackTime = Time.time; // Cập nhật thời gian tấn công cuối cùng
-                return; // Dừng lại nếu đã tấn công
+                Attack(targetAlly.transform);
+                lastAttackTime = Time.time;
             }
         }
 
-        // Nếu không có mục tiêu, tìm kiếm đồng minh mới để tấn công
+        // Logic tìm kiếm đồng minh để tấn công giống như trong lớp Enemy gốc
         GameObject[] allies = GameObject.FindGameObjectsWithTag("Ally");
         foreach (GameObject ally in allies)
         {
             Ally allyComponent = ally.GetComponent<Ally>();
-            if (allyComponent != null && !allyComponent.IsOnTower) // Chỉ tìm kiếm đồng minh không ở trên tower
+            if (allyComponent != null && !allyComponent.IsOnTower) 
             {
                 float distance = Vector2.Distance(transform.position, ally.transform.position);
                 if (distance <= attackRange && Time.time >= lastAttackTime + attackSpeed)
                 {
-                    targetAlly = ally; // Lưu trữ mục tiêu mới để tấn công
-                    Attack(targetAlly.transform); // Gọi phương thức tấn công ngay lập tức
-                    lastAttackTime = Time.time; // Cập nhật thời gian tấn công cuối cùng
-                    return; // Dừng vòng lặp nếu đã tìm thấy đồng minh để tấn công
+                    targetAlly = ally;
+                    Attack(targetAlly.transform);
+                    lastAttackTime = Time.time;
+                    return;
                 }
             }
         }
     }
 
-    void Attack(Transform target)
+    public virtual void TakeDamage(float damage)
     {
-        // Debug.Log("Enemy attacks! Damage dealt: " + attackDamage);
+        health -= damage;
+        Debug.Log("Enemy takes damage: " + damage + ". Current health: " + health);
         
-        Ally ally = target.GetComponent<Ally>(); 
-        if (ally != null)
-        {
-            ally.TakeDamage(attackDamage); 
-        }
-    }
-
-    public void TakeDamage(float damage)
-    {
-        health -= damage; 
         if (health <= 0)
         {
-            Die(); 
+            Die();
         }
     }
 
-    void Die()
+    protected void Die()
     {
         Debug.Log("Enemy died!");
+        OnEnemyDied?.Invoke(); // Gọi sự kiện khi kẻ thù chết
         Destroy(gameObject);
+    }
+
+    protected virtual void Attack(Transform target)
+    {  
+        Ally ally = target.GetComponent<Ally>();
+        if (ally != null)
+        {
+            ally.TakeDamage(attackDamage); // Gây sát thương lên đồng minh nếu cần thiết
+            // Debug.Log("Enemy dealt " + attackDamage + " damage to " + ally.name);
+        }
     }
 }

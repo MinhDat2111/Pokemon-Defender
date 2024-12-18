@@ -15,9 +15,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Level 1 Scene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Scenes/Lose Scene.unity
-    guid: 6dc18a91e3dd9ce4d89c1b53c92c2f89
-  - enabled: 1
-    path: Assets/Scenes/WIn Scene.unity
+    path: Assets/Scenes/Win Scene.unity
     guid: 630c73e1c74452b4cbee54b663bbb651
   m_configObjects: {}

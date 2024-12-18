@@ -8,6 +8,8 @@ TagManager:
   - Ally
   - Enemy
   - Stone
+  - Waypoints2
+  - Waypoints3
   layers:
   - Default
   - TransparentFX
