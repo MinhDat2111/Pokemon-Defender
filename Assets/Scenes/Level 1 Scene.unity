@@ -5543,7 +5543,7 @@ MonoBehaviour:
   spawnPoint: {fileID: 370183635}
   timeBetweenWaves: 10
   enemiesPerWave: 1
-  totalWaves: 2
+  totalWaves: 6
   winLoseManager: {fileID: 1397316022}
 --- !u!1 &981299229
 GameObject:
@@ -8446,7 +8446,7 @@ MonoBehaviour:
   spawnPoint: {fileID: 894338229}
   timeBetweenWaves: 10
   enemiesPerWave: 1
-  totalWaves: 2
+  totalWaves: 5
   winLoseManager: {fileID: 1397316022}
 --- !u!4 &1421555080
 Transform:
@@ -8693,7 +8693,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1466891430
 Transform:
   m_ObjectHideFlags: 0
@@ -8723,7 +8723,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 6999983165184876970, guid: e5ff5b5ce0d997a47bf0561b561d7e7a, type: 3}
   spawnPoint: {fileID: 894338229}
-  timeBetweenWaves: 30
+  timeBetweenWaves: 60
   enemiesPerWave: 1
   totalWaves: 1
   winLoseManager: {fileID: 1397316022}

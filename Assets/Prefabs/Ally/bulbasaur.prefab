@@ -122,7 +122,7 @@ MonoBehaviour:
   health: 100
   attackDamage: 10
   IsOnTower: 1
-  attackRange: 3
+  attackRange: 4
   attackSpeed: 1
   attackEffectPrefab: {fileID: 5408187967637115770, guid: b45d4cf12e022a64c84db5265c00a3f3, type: 3}
   bulletPrefab: {fileID: 0}

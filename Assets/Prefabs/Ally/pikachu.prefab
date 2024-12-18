@@ -120,7 +120,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+  attackDamage: 10
   IsOnTower: 1
-  attackRange: 4
-  attackCooldown: 1
+  attackRange: 5
+  attackSpeed: 0.5
   attackEffectPrefab: {fileID: 2406058584708507893, guid: 7b0e718bbdd290445a8cd591a2564a2c, type: 3}
+  bulletPrefab: {fileID: 0}
