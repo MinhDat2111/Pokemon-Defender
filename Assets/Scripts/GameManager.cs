@@ -14,6 +14,10 @@ public class GameManager : MonoBehaviour
         currentPokemon = pokemon;
         currentPokomonSprite = sprite;
     }
+    private void Start()
+    {
+        Time.timeScale = 1f;
+    }
     private void Update()
     {
         RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, Mathf.Infinity, tileMask);

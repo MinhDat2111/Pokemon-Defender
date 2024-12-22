@@ -15,7 +15,7 @@ public class ButtonLevel : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name == "Select Level Scene")
         {
-            if (PlayerPrefs.GetString("PreviousScene") == "Win scene")
+            if (PlayerPrefs.GetString("PreviousScene") == "Win Scene")
             {
                 myButton.SetActive(true); // Hiển thị Button
             }

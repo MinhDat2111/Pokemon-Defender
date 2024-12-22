@@ -52,7 +52,6 @@ public class Boss : Enemy
                 waypointIndex++;
                 if (waypointIndex >= waypoints.waypoints.Length)
                 {
-                    // Logic khi đến waypoint cuối cùng, ví dụ như gây sát thương lên viên đá trấn giữ
                     GameObject stone = GameObject.FindGameObjectWithTag("Stone");
                     if (stone != null)
                     {
@@ -78,12 +77,6 @@ public class Boss : Enemy
     public override void TakeDamage(float damage)
     {
         base.TakeDamage(damage); // Gọi phương thức TakeDamage của lớp cha
-        // Debug.Log("Boss takes damage: " + damage + ". Current health: " + health);
-        
-        // if (health <= 0)
-        // {
-        //     Die();
-        // }
     }
 
     protected override void Attack(Transform target)

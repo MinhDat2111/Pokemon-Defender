@@ -89,7 +89,7 @@ public class Ally : MonoBehaviour
 
     void AttackEnemy()
     {
-        if (Vector3.Distance(transform.position, targetEnemy.transform.position) <= attackRange && Time.time >= lastAttackTime + attackSpeed) 
+        if (Vector3.Distance(transform.position, targetEnemy.transform.position) <= attackRange && Time.time >= lastAttackTime + 1f/attackSpeed) 
         {
             lastAttackTime = Time.time;
 

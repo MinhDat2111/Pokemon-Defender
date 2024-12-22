@@ -21,26 +21,16 @@ public class Enemy1 : Enemy
     protected override void MoveTowardsWaypoint()
     {
         base.MoveTowardsWaypoint(); // Gọi phương thức của lớp cha
-
-        // Bạn có thể thêm logic di chuyển riêng cho Enemy1 nếu cần
     }
 
     protected override void CheckForAttack()
     {
         base.CheckForAttack(); // Gọi phương thức của lớp cha
-
-        // Bạn có thể thêm logic kiểm tra tấn công riêng cho Enemy1 nếu cần
     }
 
     public override void TakeDamage(float damage)
     {
         base.TakeDamage(damage); // Gọi phương thức TakeDamage của lớp cha
-        // Debug.Log("Enemy1 takes damage: " + damage + ". Current health: " + health);
-        
-        // if (health <= 0)
-        // {
-        //     Die();
-        // }
     }
 
     protected override void Attack(Transform target)

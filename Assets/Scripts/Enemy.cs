@@ -115,7 +115,7 @@ public class Enemy : MonoBehaviour
     public virtual void TakeDamage(float damage)
     {
         health -= damage;
-        Debug.Log("Enemy takes damage: " + damage + ". Current health: " + health);
+        // Debug.Log("Enemy takes damage: " + damage + ". Current health: " + health);
         
         if (health <= 0)
         {

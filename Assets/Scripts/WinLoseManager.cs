@@ -6,6 +6,7 @@ using TMPro; // Để chuyển cảnh
 public class WinLoseManager : MonoBehaviour // Đổi tên class từ GameManager thành WinManager
 {
     public float stoneHealth; // Máu của viên đá trấn giữ
+    public TextMeshProUGUI stoneHealthText;
     public TextMeshProUGUI WinLoseText; // Text hiển thị khi thua
     public GameObject background; // Background 
     public Button nextLevelButton; // Nút chuyển sang màn tiếp theo
@@ -22,6 +23,7 @@ public class WinLoseManager : MonoBehaviour // Đổi tên class từ GameManage
 
     private void Update()
     {
+        stoneHealthText.text = stoneHealth.ToString();
         // Kiểm tra nếu máu viên đá <= 0, người chơi thua
         if (stoneHealth <= 0)
         {
@@ -32,6 +34,7 @@ public class WinLoseManager : MonoBehaviour // Đổi tên class từ GameManage
     public void TakeDamage(float damage)
     {
         stoneHealth -= damage; // Giảm máu viên đá
+        Debug.Log("Energy Stone: "+ stoneHealth);
         if (stoneHealth <= 0)
         {
             WinLose(false); // Thua nếu máu <= 0
